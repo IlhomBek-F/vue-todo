@@ -1,15 +1,20 @@
 <script setup>
    import Button from 'primevue/button';
    import InputText from 'primevue/inputtext';
-   import {ref, defineEmits } from 'vue'
+   import {ref, defineEmits, watch } from 'vue'
 
    const newTask = ref('')
 
+   const {editTaskText} = defineProps(['editTaskText'])
    const emit = defineEmits(['handleAddNewTodo']);
     const addNewTodo = () => {
       emit('handleAddNewTodo', {name: newTask.value}); // Emit with parameter
       newTask.value = ''
     };
+
+    watch(() => editTaskText, () => {
+      newTask.value = editTaskText
+    })
 
 </script>
 
