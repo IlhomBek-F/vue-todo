@@ -4,13 +4,14 @@
    import DataTable from 'primevue/datatable';
    import Column from 'primevue/column';
    import Button from 'primevue/button';
-
    import {ref} from 'vue';
-
    const todos = ref([{name: 'Coding'}])
    const editTaskText = ref('')
    const handleAddTodo = (value) => {
-        if(value.name.length) {
+        if(editTaskText.value.length) {
+          todos.value = todos.value.map((todo) => todo.name === editTaskText.value ? value : todo);
+          editTaskText.value = ''
+        }else if(value.name.length) {
           todos.value = [...todos.value, value];
         }
    }
@@ -22,7 +23,6 @@
    const handleEdit = (task) => {
      editTaskText.value = task.name
    };
-
 </script>
 
 <template>

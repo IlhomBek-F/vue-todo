@@ -15,13 +15,12 @@
     watch(() => editTaskText, () => {
       newTask.value = editTaskText
     })
-
 </script>
 
 <template>
    <div class="container">
      <InputText class="input" v-model="newTask"/>
-     <Button label="Add" @click="addNewTodo" severity="success" />
+     <Button :label="editTaskText ? 'Edit' : 'Add'" @click="addNewTodo" severity="success" />
    </div>
 </template>
 
