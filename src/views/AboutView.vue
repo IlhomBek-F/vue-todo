@@ -44,7 +44,7 @@
     </template>
     <template #content>
       <Todo @handleAddNewTodo="handleAddTodo" :editTaskText="editTaskText"/>
-      <DataTable :value="filter" showGridlines tableStyle="min-width: 50rem">
+      <DataTable :value="filter" showGridlines >
         <Column field="name" header="Name"></Column>
         <Column header="Action" style="width: 100px; text-align: center;">
           <template #body="{ data }">
