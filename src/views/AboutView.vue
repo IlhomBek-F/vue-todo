@@ -4,9 +4,13 @@
    import DataTable from 'primevue/datatable';
    import Column from 'primevue/column';
    import Button from 'primevue/button';
-   import {ref} from 'vue';
-   const todos = ref([{name: 'Coding'}])
-   const editTaskText = ref('')
+   import InputText from 'primevue/inputtext';
+
+   import {ref, watch, computed} from 'vue';
+   const todos = ref([{name: 'Coding'}]);
+   const editTaskText = ref('');
+   const searchValue = ref('');
+
    const handleAddTodo = (value) => {
         if(editTaskText.value.length) {
           todos.value = todos.value.map((todo) => todo.name === editTaskText.value ? value : todo);
@@ -23,14 +27,24 @@
    const handleEdit = (task) => {
      editTaskText.value = task.name
    };
+
+   const filter = computed(() => {
+    return todos.value.filter(todo => todo.name.includes(searchValue.value));
+   })
+
 </script>
 
 <template>
   <Card>
-    <template #title>Add todo</template>
+    <template #title>
+       <div class="header">
+         Add todo
+         <InputText type="text" placeholder="search..." v-model="searchValue" />
+       </div>
+    </template>
     <template #content>
       <Todo @handleAddNewTodo="handleAddTodo" :editTaskText="editTaskText"/>
-      <DataTable :value="todos" showGridlines tableStyle="min-width: 50rem">
+      <DataTable :value="filter" showGridlines tableStyle="min-width: 50rem">
         <Column field="name" header="Name"></Column>
         <Column header="Action" style="width: 100px; text-align: center;">
           <template #body="{ data }">
@@ -46,6 +60,12 @@
 </template>
 
 <style>
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
  .action {
   display: flex;
   gap: 5px;
