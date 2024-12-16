@@ -8,7 +8,7 @@
    const {editTaskText} = defineProps(['editTaskText'])
    const emit = defineEmits(['handleAddNewTodo']);
     const addNewTodo = () => {
-      emit('handleAddNewTodo', {name: newTask.value}); // Emit with parameter
+      emit('handleAddNewTodo', {name: newTask.value, completed: false}); // Emit with parameter
       newTask.value = ''
     };
 

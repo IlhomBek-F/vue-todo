@@ -6,7 +6,9 @@
    import Button from 'primevue/button';
    import InputText from 'primevue/inputtext';
 
-   import {ref, watch, computed} from 'vue';
+   import Checkbox from 'primevue/checkbox';
+
+   import {ref, computed} from 'vue';
    const todos = ref([{name: 'Coding'}]);
    const editTaskText = ref('');
    const searchValue = ref('');
@@ -45,7 +47,15 @@
     <template #content>
       <Todo @handleAddNewTodo="handleAddTodo" :editTaskText="editTaskText"/>
       <DataTable :value="filter" showGridlines >
-        <Column field="name" header="Name"></Column>
+        <Column field="name" style="width: 30px; text-align: center;">
+          <template #header>
+               <i class="pi pi-check-circle"></i>
+          </template>
+          <template #body="{data}">
+            <Checkbox :model="data.completed" inputId="ingredient1" name="pizza" value="Cheese" />
+          </template>
+        </Column>
+        <Column field="name" header="Task"></Column>
         <Column header="Action" style="width: 100px; text-align: center;">
           <template #body="{ data }">
              <div class="action">
@@ -69,6 +79,10 @@
  .action {
   display: flex;
   gap: 5px;
+ }
+
+ .pi-check-circle {
+  color: rgb(0, 189, 0);
  }
 </style>
 
