@@ -8,17 +8,12 @@
 
    import Checkbox from 'primevue/checkbox';
 
-   import {ref, computed, inject, watch} from 'vue';
+   import {ref, computed, inject} from 'vue';
    import { useRouter } from 'vue-router';
 
-   const {tasks, editTask} = inject('task');
+   const {tasks, editTask, deleteTask} = inject('task');
    const router = useRouter();
    const searchValue = ref('');
-
-   const deleteTask = (t) => {
-    todos.value = todos.value.filter((task) => task.name !== t.name);
-   };
-
 
    const filter = computed(() => {
     return tasks.value.filter(todo => todo.name.includes(searchValue.value));
@@ -60,7 +55,7 @@
         <Column header="Action" style="width: 100px; text-align: center;">
           <template #body="{ data }">
              <div class="action">
-               <Button icon="pi pi-times" @click="deleteTask(data)" severity="danger" rounded></Button>
+               <Button icon="pi pi-times" @click="deleteTask(data.id)" severity="danger" rounded></Button>
                <Button icon="pi pi-pencil" @click="editTask(data)" severity="success" rounded></Button>
              </div>
           </template>

@@ -5,9 +5,10 @@ import { provide, ref } from 'vue';
 
   const addTask = (task, edit) => {
      if(edit) {
-       tasks.value.map((t) => t.id === task.id ? task : t)
+       tasks.value = tasks.value.map((t) => t.id === task.id ? task : t)
+       editTaskValue.value = {};
      } else {
-        tasks.value.push(task)
+      tasks.value.push(task)
      }
   }
 
@@ -15,8 +16,13 @@ import { provide, ref } from 'vue';
     editTaskValue.value = task;
   }
 
+  const deleteTask = (taskId) => {
+     tasks.value = tasks.value.filter((t) => t.id !== taskId);
+  }
+
   provide('task', {
     editTaskValue,
+    deleteTask,
     editTask,
     tasks,
     addTask
