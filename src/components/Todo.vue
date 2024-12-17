@@ -1,26 +1,32 @@
 <script setup>
    import Button from 'primevue/button';
    import InputText from 'primevue/inputtext';
-   import {ref, defineEmits, watch } from 'vue'
+   import {ref, defineEmits, watch, inject } from 'vue'
 
-   const newTask = ref('')
+  const newTask = ref('')
+  const {addTask, editTaskValue, editTask} = inject('task');
 
-   const {editTaskText} = defineProps(['editTaskText'])
+  watch(editTaskValue, (newValue) => {
+      newTask.value = newValue.name
+  })
+
    const emit = defineEmits(['handleAddNewTodo']);
     const addNewTodo = () => {
-      emit('handleAddNewTodo', {name: newTask.value, completed: false}); // Emit with parameter
+        if(editTaskValue.value?.id) {
+          addTask({...editTaskValue, name: newTask.value}, true)
+        } else {
+          addTask({name: newTask.value, completed: false, id: Math.random() * 1000}, false)
+        }
       newTask.value = ''
     };
 
-    watch(() => editTaskText, () => {
-      newTask.value = editTaskText
-    })
+
 </script>
 
 <template>
    <div class="container">
      <InputText class="input" v-model="newTask"/>
-     <Button :label="editTaskText ? 'Edit' : 'Add'" @click="addNewTodo" severity="success" />
+     <Button :label="editTaskValue ? 'Edit' : 'Add'" @click="addNewTodo" severity="success" />
    </div>
 </template>
 

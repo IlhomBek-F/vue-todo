@@ -8,31 +8,29 @@
 
    import Checkbox from 'primevue/checkbox';
 
-   import {ref, computed} from 'vue';
-   const todos = ref([{name: 'Coding'}]);
-   const editTaskText = ref('');
-   const searchValue = ref('');
+   import {ref, computed, inject, watch} from 'vue';
+   import { useRouter } from 'vue-router';
 
-   const handleAddTodo = (value) => {
-        if(editTaskText.value.length) {
-          todos.value = todos.value.map((todo) => todo.name === editTaskText.value ? value : todo);
-          editTaskText.value = ''
-        }else if(value.name.length) {
-          todos.value = [...todos.value, value];
-        }
-   }
+   const {tasks, editTask} = inject('task');
+   const router = useRouter();
+   const searchValue = ref('');
 
    const deleteTask = (t) => {
     todos.value = todos.value.filter((task) => task.name !== t.name);
    };
 
-   const handleEdit = (task) => {
-     editTaskText.value = task.name
-   };
 
    const filter = computed(() => {
-    return todos.value.filter(todo => todo.name.includes(searchValue.value));
-   })
+    return tasks.value.filter(todo => todo.name.includes(searchValue.value));
+   });
+
+   const goToCompletedPage = () => {
+    router.push('/completed')
+   }
+
+   const onCompleteChange = (evt, id) => {
+    console.log(id)
+   }
 
 </script>
 
@@ -41,18 +39,21 @@
     <template #title>
        <div class="header">
          Add todo
-         <InputText type="text" placeholder="search..." v-model="searchValue" />
+         <div style="display: flex; gap: 10px;">
+          <Button type="button" label="Completed" @click="goToCompletedPage" icon="pi pi-check-circle" badge="2" badgeSeverity="contrast" variant="outlined" />
+           <InputText type="text" placeholder="search..." v-model="searchValue" />
+         </div>
        </div>
     </template>
     <template #content>
-      <Todo @handleAddNewTodo="handleAddTodo" :editTaskText="editTaskText"/>
+      <Todo />
       <DataTable :value="filter" showGridlines >
         <Column field="name" style="width: 30px; text-align: center;">
           <template #header>
                <i class="pi pi-check-circle"></i>
           </template>
           <template #body="{data}">
-            <Checkbox :model="data.completed" inputId="ingredient1" name="pizza" value="Cheese" />
+            <Checkbox :model="data.completed" @value-change="(event) => onCompleteChange(event, data.id)" :value="true"  />
           </template>
         </Column>
         <Column field="name" header="Task"></Column>
@@ -60,15 +61,15 @@
           <template #body="{ data }">
              <div class="action">
                <Button icon="pi pi-times" @click="deleteTask(data)" severity="danger" rounded></Button>
-               <Button icon="pi pi-pencil" @click="handleEdit(data)" severity="success" rounded></Button>
+               <Button icon="pi pi-pencil" @click="editTask(data)" severity="success" rounded></Button>
              </div>
           </template>
         </Column>
+        <template #empty> No todos found. </template>
       </DataTable>
     </template>
   </Card>
 </template>
-
 <style>
 
 .header {
