@@ -11,7 +11,7 @@
    import {ref, computed, inject} from 'vue';
    import { useRouter } from 'vue-router';
 
-   const {tasks, editTask, deleteTask} = inject('task');
+   const {tasks, editTask, deleteTask, completeTask, completedTasks} = inject('task');
    const router = useRouter();
    const searchValue = ref('');
 
@@ -23,8 +23,8 @@
     router.push('/completed')
    }
 
-   const onCompleteChange = (evt, id) => {
-    console.log(id)
+   const onCompleteChange = (status, id) => {
+     completeTask(id)
    }
 
 </script>
@@ -35,7 +35,7 @@
        <div class="header">
          Add todo
          <div style="display: flex; gap: 10px;">
-          <Button type="button" label="Completed" @click="goToCompletedPage" icon="pi pi-check-circle" badge="2" badgeSeverity="contrast" variant="outlined" />
+          <Button type="button" label="Completed" @click="goToCompletedPage" icon="pi pi-check-circle" :badge="completedTasks.length" badgeSeverity="contrast" variant="outlined" />
            <InputText type="text" placeholder="search..." v-model="searchValue" />
          </div>
        </div>
@@ -48,7 +48,7 @@
                <i class="pi pi-check-circle"></i>
           </template>
           <template #body="{data}">
-            <Checkbox :model="data.completed" @value-change="(event) => onCompleteChange(event, data.id)" :value="true"  />
+            <Checkbox :model="data.completed" binary @update:modelValue="(event) => onCompleteChange(event, data.id)" :value="data.id"  />
           </template>
         </Column>
         <Column field="name" header="Task"></Column>

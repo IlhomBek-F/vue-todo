@@ -3,7 +3,8 @@
    import DataTable from 'primevue/datatable';
    import Column from 'primevue/column';
    import Checkbox from 'primevue/checkbox';
-   import {ref, computed} from 'vue';
+   import {ref, computed, inject} from 'vue';
+   const {completedTasks, unComplete} = inject('task');
    const todos = ref([{name: 'Coding'}]);
    const searchValue = ref('');
 
@@ -17,16 +18,17 @@
   <Card>
     <template #title>Completed</template>
     <template #content>
-      <DataTable :value="filter" showGridlines >
+      <DataTable :value="completedTasks" showGridlines >
         <Column field="name" style="width: 30px; text-align: center;">
           <template #header>
                <i class="pi pi-check-circle"></i>
           </template>
           <template #body="{data}">
-            <Checkbox :model="data.completed" inputId="ingredient1" name="pizza" value="Cheese" />
+            <Checkbox v-model="data.completed" @update:modelValue="(event) => unComplete(event, data.id)" binary inputId="ingredient1"  :value="data.id" />
           </template>
         </Column>
         <Column field="name" header="Task"></Column>
+        <template #empty>No completed tasks found.</template>
       </DataTable>
     </template>
   </Card>
