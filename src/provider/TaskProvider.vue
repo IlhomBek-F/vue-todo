@@ -33,28 +33,30 @@ import { computed, provide, ref } from 'vue';
     return filterObj[filterBy.value]
   });
 
+  const updateTaskStatus = (status, id) => {
+    filterBy.value = FILTER_BY.ALL;
+    status ? completeTask(id) : unComplete(id)
+  }
+
   const completeTask = (id) => {
-    const foundTask = tasks.value.find((t) => t.id === id);
-    data.value = data.value.filter((t) => t.id !== id);
-    completedTasks.value.push({...foundTask, completed: true});
+    data.value = data.value.map((task) => task.id === id ? {...task, completed: true} : task);
+    tasks.value = data.value
   }
 
   const handleFilter = (filter) => {
-     filterBy.value = filter
+     filterBy.value = filter;
+     console.log(tasks)
   }
 
   const unComplete = (status, id) => {
      if(!status) {
-       const foundTask = completedTasks.value.find((t) => t.id === id);
-       completedTasks.value = completedTasks.value.filter((t) => t.id !== id);
-       data.value = [...data.value, {...foundTask, completed: false}];
+      data.value = data.value.map((task) => task.id === id ? {...task, completed: false} : task);
      }
   }
 
   provide('task', {
-    completeTask,
+    updateTaskStatus,
     handleFilter,
-    unComplete,
     editTaskValue,
     completedTasks,
     deleteTask,

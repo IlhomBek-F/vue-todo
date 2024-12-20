@@ -8,17 +8,12 @@
    import FilterBar from '@/components/FilterBar.vue';
    import {ref, computed, inject} from 'vue';
 
-   const {tasks, editTask, deleteTask, completeTask} = inject('task');
+   const {tasks, editTask, deleteTask, updateTaskStatus} = inject('task');
    const searchValue = ref('');
 
    const filter = computed(() => {
     return tasks.value.filter(todo => todo.name.includes(searchValue.value));
    });
-
-   const onCompleteChange = (status, id) => {
-     completeTask(id)
-   }
-
 </script>
 
 <template>
@@ -34,7 +29,7 @@
                <i class="pi pi-check-circle"></i>
           </template>
           <template #body="{data}">
-            <Checkbox :model="data.completed" binary @update:modelValue="(event) => onCompleteChange(event, data.id)" :value="data.id"  />
+            <Checkbox v-model="data.completed" binary @update:modelValue="(event) => updateTaskStatus(event, data.id)" :value="data.completed"  />
           </template>
         </Column>
         <Column field="name" header="Task"></Column>

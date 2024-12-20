@@ -14,7 +14,8 @@ const items = ref([
         items: [
             {
               label: 'All',
-              icon: 'pi pi-equals'
+              icon: 'pi pi-equals',
+              command: () => handleFilter(FILTER_BY.ALL)
             },
             {
               label: 'completed',
