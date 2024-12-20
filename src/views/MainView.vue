@@ -4,24 +4,16 @@
    import DataTable from 'primevue/datatable';
    import Column from 'primevue/column';
    import Button from 'primevue/button';
-   import InputText from 'primevue/inputtext';
-
    import Checkbox from 'primevue/checkbox';
-
+   import FilterBar from '@/components/FilterBar.vue';
    import {ref, computed, inject} from 'vue';
-   import { useRouter } from 'vue-router';
 
-   const {tasks, editTask, deleteTask, completeTask, completedTasks} = inject('task');
-   const router = useRouter();
+   const {tasks, editTask, deleteTask, completeTask} = inject('task');
    const searchValue = ref('');
 
    const filter = computed(() => {
     return tasks.value.filter(todo => todo.name.includes(searchValue.value));
    });
-
-   const goToCompletedPage = () => {
-    router.push('/completed')
-   }
 
    const onCompleteChange = (status, id) => {
      completeTask(id)
@@ -32,13 +24,7 @@
 <template>
   <Card>
     <template #title>
-       <div class="header">
-         Add todo
-         <div style="display: flex; gap: 10px;">
-          <Button type="button" label="Completed" @click="goToCompletedPage" icon="pi pi-check-circle" :badge="completedTasks.length" badgeSeverity="contrast" variant="outlined" />
-           <InputText type="text" placeholder="search..." v-model="searchValue" />
-         </div>
-       </div>
+       <FilterBar />
     </template>
     <template #content>
       <Todo />
@@ -66,12 +52,6 @@
   </Card>
 </template>
 <style>
-
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-
  .action {
   display: flex;
   gap: 5px;

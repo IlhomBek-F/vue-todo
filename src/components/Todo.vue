@@ -13,19 +13,17 @@
     const addNewTodo = () => {
         if(editTaskValue.value?.id) {
           addTask({...editTaskValue.value, name: newTask.value}, true)
-        } else {
+        } else if(newTask.value.trim().length){
           addTask({name: newTask.value, completed: false, id: Math.random() * 1000}, false)
         }
       newTask.value = ''
     };
-
-
 </script>
 
 <template>
    <div class="container">
      <InputText class="input" v-model="newTask"/>
-     <Button :label="editTaskValue?.id ? 'Edit' : 'Add'" @click="addNewTodo" severity="success" />
+     <Button  :label="editTaskValue?.id ? 'Edit' : 'Add'" @click="addNewTodo" severity="contrast" />
    </div>
 </template>
 
