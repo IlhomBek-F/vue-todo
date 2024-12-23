@@ -47,7 +47,6 @@ import { computed, provide, ref } from 'vue';
 
   const completeTask = (id) => {
     data.value = data.value.map((task) => task.id === id ? {...task, completed: true} : task);
-    tasks.value = data.value
   }
 
   const handleFilter = (filter) => {
