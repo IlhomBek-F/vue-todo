@@ -2,13 +2,14 @@
 import { FILTER_BY } from '@/core';
 import { computed, provide, ref } from 'vue';
   const filterBy = ref(FILTER_BY.ALL);
+  const searchBy = ref('');
   const data = ref([]);
   const editTaskValue = ref();
   const completedTasks = ref([]);
 
   const addTask = (task, edit) => {
      if(edit) {
-      data.value = data.value.map((t) => t.id === task.id ? task : t)
+       data.value = data.value.map((t) => t.id === task.id ? task : t)
        editTaskValue.value = {};
      } else {
       data.value.push(task)
@@ -30,7 +31,13 @@ import { computed, provide, ref } from 'vue';
       [FILTER_BY.UNCOMPLETED]: data.value.filter((task) => !task.completed)
     };
 
-    return filterObj[filterBy.value]
+    const filteredData = filterObj[filterBy.value];
+
+    if(searchBy.value.trim().length) {
+      return filteredData.filter((task) => task.name.startsWith(searchBy.value))
+    }
+
+    return filteredData
   });
 
   const updateTaskStatus = (status, id) => {
@@ -45,7 +52,6 @@ import { computed, provide, ref } from 'vue';
 
   const handleFilter = (filter) => {
      filterBy.value = filter;
-     console.log(tasks)
   }
 
   const unComplete = (status, id) => {
@@ -57,6 +63,7 @@ import { computed, provide, ref } from 'vue';
   provide('task', {
     updateTaskStatus,
     handleFilter,
+    searchBy,
     editTaskValue,
     completedTasks,
     deleteTask,

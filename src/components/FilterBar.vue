@@ -5,7 +5,7 @@ import { Menu } from 'primevue';
 import { ref , inject} from "vue";
 import { FILTER_BY } from '@/core';
 
-const {handleFilter} = inject('task');
+const {handleFilter, searchBy} = inject('task');
 
 const menu = ref();
 const items = ref([
@@ -42,7 +42,7 @@ const toggle = (event) => {
          <div style="display: flex; gap: 10px;">
            <Button severity="contrast" type="button" icon="pi pi-sliders-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
            <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
-           <InputText type="text" placeholder="search..." v-model="searchValue" />
+           <InputText type="text" placeholder="search..." v-model="searchBy" />
          </div>
   </div>
 </template>

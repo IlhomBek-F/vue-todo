@@ -6,14 +6,10 @@
    import Button from 'primevue/button';
    import Checkbox from 'primevue/checkbox';
    import FilterBar from '@/components/FilterBar.vue';
-   import {ref, computed, inject} from 'vue';
+   import { inject } from 'vue';
 
    const {tasks, editTask, deleteTask, updateTaskStatus} = inject('task');
-   const searchValue = ref('');
 
-   const filter = computed(() => {
-    return tasks.value.filter(todo => todo.name.includes(searchValue.value));
-   });
 </script>
 
 <template>
@@ -23,7 +19,7 @@
     </template>
     <template #content>
       <Todo />
-      <DataTable :value="filter" showGridlines >
+      <DataTable :value="tasks" showGridlines >
         <Column field="name" style="width: 30px; text-align: center;">
           <template #header>
                <i class="pi pi-check-circle"></i>
